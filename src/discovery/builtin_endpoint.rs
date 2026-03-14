@@ -18,6 +18,12 @@ impl BuiltinEndpointSet {
   pub const PARTICIPANT_MESSAGE_DATA_WRITER: u32 = 0x00000400;
   pub const PARTICIPANT_MESSAGE_DATA_READER: u32 = 0x00000800;
 
+  // DDS-XTypes v1.3 §7.6.3.3.3
+  pub const TYPELOOKUP_SERVICE_REQUEST_WRITER: u32 = 1 << 12;
+  pub const TYPELOOKUP_SERVICE_REQUEST_READER: u32 = 1 << 13;
+  pub const TYPELOOKUP_SERVICE_REPLY_WRITER: u32 = 1 << 14;
+  pub const TYPELOOKUP_SERVICE_REPLY_READER: u32 = 1 << 15;
+
   // DDS Security spec v1.1
   // Section 7.4.1.4 Extension to RTPS Standard DCPSParticipants Builtin Topic
   // Table 11

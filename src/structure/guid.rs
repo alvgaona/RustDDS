@@ -276,6 +276,24 @@ impl EntityId {
     entity_kind: EntityKind::READER_WITH_KEY_BUILT_IN,
   };
 
+  // DDS-XTypes v1.3 §7.6.3 TypeLookup Service builtin endpoints
+  pub const TYPELOOKUP_SERVICE_REQUEST_WRITER: Self = Self {
+    entity_key: [0x00, 0x03, 0x00],
+    entity_kind: EntityKind::WRITER_NO_KEY_BUILT_IN,
+  };
+  pub const TYPELOOKUP_SERVICE_REQUEST_READER: Self = Self {
+    entity_key: [0x00, 0x03, 0x00],
+    entity_kind: EntityKind::READER_NO_KEY_BUILT_IN,
+  };
+  pub const TYPELOOKUP_SERVICE_REPLY_WRITER: Self = Self {
+    entity_key: [0x00, 0x03, 0x01],
+    entity_kind: EntityKind::WRITER_NO_KEY_BUILT_IN,
+  };
+  pub const TYPELOOKUP_SERVICE_REPLY_READER: Self = Self {
+    entity_key: [0x00, 0x03, 0x01],
+    entity_kind: EntityKind::READER_NO_KEY_BUILT_IN,
+  };
+
   // DDS SEcurity spec v1.1
   // Section "7.3.7 Mapping to UDP/IP PSM"
   // Table 9 – EntityId values for secure builtin data writers and data readers

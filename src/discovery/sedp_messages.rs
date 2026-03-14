@@ -22,6 +22,7 @@ use crate::{
     topic::{Topic, TopicDescription},
     with_key::datawriter::DataWriter,
   },
+  dds::xtypes::TypeInformation,
   discovery::content_filter_property::ContentFilterProperty,
   messages::submessages::elements::{
     parameter::Parameter,
@@ -301,6 +302,7 @@ pub struct DiscoveredReaderData {
   pub reader_proxy: ReaderProxy,
   pub subscription_topic_data: SubscriptionBuiltinTopicData,
   pub content_filter: Option<ContentFilterProperty>,
+  pub type_information: Option<TypeInformation>,
 }
 
 impl DiscoveredReaderData {
@@ -321,6 +323,7 @@ impl DiscoveredReaderData {
       reader_proxy,
       subscription_topic_data,
       content_filter: None,
+      type_information: None,
     }
   }
 }
@@ -392,6 +395,17 @@ impl PlCdrDeserialize for DiscoveredReaderData {
       e
     })?;
 
+    let type_information: Option<TypeInformation> = get_option_from_pl_map(
+      &pl_map,
+      ctx,
+      ParameterId::PID_TYPE_INFORMATION,
+      "type information",
+    )
+    .unwrap_or_else(|e| {
+      debug!("Failed to parse TypeInformation: {e}");
+      None
+    });
+
     #[cfg(not(feature = "security"))]
     let security_info = None;
     #[cfg(feature = "security")]
@@ -420,6 +434,7 @@ impl PlCdrDeserialize for DiscoveredReaderData {
         security_info,
       ),
       content_filter,
+      type_information,
     })
   }
 }
@@ -476,6 +491,7 @@ impl ParameterListable for DiscoveredReaderData {
           security_info,
         },
       content_filter,
+      type_information: _, // TypeInformation uses XCDR2 encoding, not PL_CDR
     } = self;
 
     let mut pl = ParameterList::new();
@@ -747,6 +763,7 @@ pub struct DiscoveredWriterData {
 
   pub writer_proxy: WriterProxy,
   pub publication_topic_data: PublicationBuiltinTopicData,
+  pub type_information: Option<TypeInformation>,
 }
 
 impl Keyed for DiscoveredWriterData {
@@ -781,6 +798,7 @@ impl DiscoveredWriterData {
       last_updated: Instant::now(),
       writer_proxy,
       publication_topic_data,
+      type_information: None,
     }
   }
 }
@@ -793,6 +811,11 @@ impl PlCdrDeserialize for DiscoveredWriterData {
     let ctx = pl_cdr_rep_id_to_speedy_d(encoding)?;
     let pl = ParameterList::read_from_buffer_with_ctx(ctx, input_bytes)?;
     let pl_map = pl.to_map();
+
+    trace!(
+      "DiscoveredWriterData PIDs present: {:?}",
+      pl_map.keys().collect::<Vec<_>>()
+    );
 
     let guid: GUID = get_first_from_pl_map(
       &pl_map,
@@ -834,6 +857,17 @@ impl PlCdrDeserialize for DiscoveredWriterData {
       "Max size serialized",
     )?;
 
+    let type_information: Option<TypeInformation> = get_option_from_pl_map(
+      &pl_map,
+      ctx,
+      ParameterId::PID_TYPE_INFORMATION,
+      "type information",
+    )
+    .unwrap_or_else(|e| {
+      debug!("Failed to parse TypeInformation: {e}");
+      None
+    });
+
     #[cfg(feature = "security")]
     let security_info: Option<EndpointSecurityInfo> = get_option_from_pl_map(
       &pl_map,
@@ -863,6 +897,7 @@ impl PlCdrDeserialize for DiscoveredWriterData {
         &qos,
         security_info,
       ),
+      type_information,
     })
   }
 }
@@ -918,6 +953,7 @@ impl ParameterListable for DiscoveredWriterData {
           #[cfg(feature = "security")]
           security_info,
         },
+      type_information: _, // TypeInformation uses XCDR2 encoding, not PL_CDR
     } = self;
 
     let mut pl = ParameterList::new();
@@ -1350,6 +1386,7 @@ mod tests {
       reader_proxy,
       subscription_topic_data: sub_topic_data,
       content_filter: Some(content_filter),
+      type_information: None,
     };
 
     // serialize
@@ -1406,6 +1443,7 @@ mod tests {
       last_updated: Instant::now(),
       writer_proxy,
       publication_topic_data: pub_topic_data,
+      type_information: None,
     };
 
     let sdata = dwd

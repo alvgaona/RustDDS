@@ -64,6 +64,9 @@ impl ParameterId {
   pub const PID_KEY_HASH: Self = Self { value: 0x0070 };
   pub const PID_STATUS_INFO: Self = Self { value: 0x0071 };
 
+  // DDS-XTypes v1.3
+  pub const PID_TYPE_INFORMATION: Self = Self { value: 0x0075 };
+
   // From Specification "Remote Procedure Calls over DDS v1.0"
   // Section 7.6.2.1.1 Extended PublicationBuiltin TopicData and
   // 7.6.2.1.2 Extended SubscriptionBuiltinTopicData
@@ -436,5 +439,11 @@ mod tests {
       ParameterId::PID_STATUS_INFO,
       le = [0x71, 0x00],
       be = [0x00, 0x71]
+  },
+  {
+      pid_type_information,
+      ParameterId::PID_TYPE_INFORMATION,
+      le = [0x75, 0x00],
+      be = [0x00, 0x75]
   });
 }

@@ -40,3 +40,6 @@ pub mod with_key;
 
 /// Serializer/deserializer adapters to connect serialization to RTPS.
 pub mod adapters;
+
+/// DDS-XTypes type system support (TypeObject, TypeIdentifier, TypeInformation).
+pub mod xtypes;

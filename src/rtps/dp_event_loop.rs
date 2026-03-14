@@ -710,6 +710,7 @@ impl DPEventLoop {
           topic_name: remote_reader.subscription_topic_data.topic_name.clone(),
           type_name: remote_reader.subscription_topic_data.type_name().clone(),
           qos: remote_reader.subscription_topic_data.qos(),
+          type_information: remote_reader.type_information.clone(),
         },
       })
       .unwrap_or_else(|e| error!("Cannot report participant status: {e:?}"));
@@ -798,6 +799,7 @@ impl DPEventLoop {
           topic_name: remote_writer.publication_topic_data.topic_name.clone(),
           type_name: remote_writer.publication_topic_data.type_name.clone(),
           qos: remote_writer.publication_topic_data.qos(),
+          type_information: remote_writer.type_information.clone(),
         },
       })
       .unwrap_or_else(|e| error!("Cannot report participant status: {e:?}"));

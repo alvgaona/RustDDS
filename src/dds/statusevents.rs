@@ -21,7 +21,7 @@ use mio_08::{event, Interest, Registry, Token};
 use chrono::Utc;
 
 use crate::{
-  dds::{qos::QosPolicyId, topic::TopicData},
+  dds::{qos::QosPolicyId, topic::TopicData, xtypes::TypeInformation},
   discovery::SpdpDiscoveredParticipantData,
   messages::{protocol_version::ProtocolVersion, vendor_id::VendorId},
   mio_source::*,
@@ -395,6 +395,7 @@ pub struct EndpointDescription {
   pub topic_name: String,
   pub type_name: String,
   pub qos: QosPolicies,
+  pub type_information: Option<TypeInformation>,
 }
 
 #[derive(Debug, Clone)]

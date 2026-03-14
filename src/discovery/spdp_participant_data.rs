@@ -167,7 +167,11 @@ impl SpdpDiscoveredParticipantData {
       | BuiltinEndpointSet::PARTICIPANT_MESSAGE_DATA_WRITER
       | BuiltinEndpointSet::PARTICIPANT_MESSAGE_DATA_READER
       | BuiltinEndpointSet::TOPICS_ANNOUNCER
-      | BuiltinEndpointSet::TOPICS_DETECTOR;
+      | BuiltinEndpointSet::TOPICS_DETECTOR
+      | BuiltinEndpointSet::TYPELOOKUP_SERVICE_REQUEST_WRITER
+      | BuiltinEndpointSet::TYPELOOKUP_SERVICE_REQUEST_READER
+      | BuiltinEndpointSet::TYPELOOKUP_SERVICE_REPLY_WRITER
+      | BuiltinEndpointSet::TYPELOOKUP_SERVICE_REPLY_READER;
 
     // Security-related items initially None
     #[cfg(feature = "security")]
