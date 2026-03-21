@@ -1168,6 +1168,11 @@ impl Discovery {
               guid: reader_key,
               reason: LostReason::Disposed,
             });
+            self
+              .dcps_subscription
+              .writer
+              .dispose(&Endpoint_GUID(reader_key), None)
+              .unwrap_or_else(|e| error!("Propagating Reader dispose to SEDP cache: {e:?}"));
           }
         }
       }
@@ -1232,6 +1237,11 @@ impl Discovery {
               guid: writer_key,
               reason: LostReason::Disposed,
             });
+            self
+              .dcps_publication
+              .writer
+              .dispose(&Endpoint_GUID(writer_key), None)
+              .unwrap_or_else(|e| error!("Propagating Writer dispose to SEDP cache: {e:?}"));
 
             debug!("Disposed Writer {writer_key:?}");
           }
